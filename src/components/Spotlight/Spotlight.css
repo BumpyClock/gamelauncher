@@ -1,0 +1,95 @@
+/* src/components/Spotlight.css */
+
+.spotlight-wrapper {
+    width: 100%;
+    /* overflow: hidden; */
+    position: relative;
+  }
+  
+  .spotlight-container {
+    display: flex;
+    align-items: center;
+    
+    height: 300px; /* Adjust the height as needed */
+    transition: all 0.5s ease;
+  }
+  
+  .spotlight-card {
+    flex-shrink: 0;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    transition: all 0.5s ease;
+    position: relative;
+    margin-right: 10px;
+  }
+
+  .spotlight-card .spotlight-image {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+  }
+
+  .spotlight-card-shadow {
+    position: absolute;
+    top: -5%;
+    left:-5%;
+    height:110%;
+    width: 110%;
+    filter:blur(80px);
+    background-size: cover;
+    background-position: center;
+    /* opacity: .5; */
+  }
+
+  .spotlight-card:not(.selected) .spotlight-card-shadow {
+    z-index: -100;
+  }
+  
+  .spotlight-card.selected .spotlight-card-shadow {
+    z-index: -100;
+  }
+  
+  .spotlight-card.selected {
+    width: 500px; /* Expanded width */
+    aspect-ratio: 16/9;
+  }
+  
+  .spotlight-card:not(.selected) {
+    width: 200px; /* Non-selected card width */
+    filter: brightness(0.9);
+  }
+  
+  .spotlight-card:hover {
+    cursor: pointer;
+  }
+  
+  .spotlight-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+  }
+  
+  .spotlight-content h4 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .spotlight-content p {
+    margin-top: 5px;
+    font-size: 16px;
+  }
+  
+  /* Hide scrollbar if any */
+  .spotlight-container {
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .spotlight-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
