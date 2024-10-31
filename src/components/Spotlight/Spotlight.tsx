@@ -32,7 +32,7 @@ const Spotlight: React.FC<SpotlightProps> = ({ items, isFocused, onLoseFocus }) 
           const data = await getProductData(item);
           return {
             ...data,
-            title: item,
+            title: data.title,
             SuperHeroArt: data.SuperHeroArt || { Url: '' },
           };
         })
@@ -46,30 +46,28 @@ const Spotlight: React.FC<SpotlightProps> = ({ items, isFocused, onLoseFocus }) 
   // Memoize handleButtonDown using useCallback
   const handleButtonDown = useCallback(
     (buttonIndex: number, gamepadIndex: number) => {
-
-      console.log(`Button ${buttonIndex} pressed on gamepad ${gamepadIndex}`);
-
-      if (!isFocused) return;
-
+      console.log(`Spotlight: Button ${buttonIndex} pressed on gamepad ${gamepadIndex}`);
+      if (!isFocused) return false;
+  
       switch (buttonIndex) {
         case 14: // D-Pad Left
           console.log('Spotlight: D-Pad Left');
           setSelectedCard((prev) => (prev > 0 ? prev - 1 : items.length - 1));
-          break;
+          return true;
         case 15: // D-Pad Right
           console.log('Spotlight: D-Pad Right');
           setSelectedCard((prev) => (prev < items.length - 1 ? prev + 1 : 0));
-          break;
+          return true;
         case 0: // 'A' button
           console.log(`Spotlight: Selected ${items[selectedCard]}`);
-          break;
+          return true;
         case 13: // D-Pad Down to lose focus
           console.log('Spotlight: D-Pad Down, losing focus');
           onLoseFocus();
-          break;
+          return true;
         default:
           console.log(`Spotlight: Unhandled button ${buttonIndex}`);
-          break;
+          return false;
       }
     },
     [isFocused, items, selectedCard, onLoseFocus]

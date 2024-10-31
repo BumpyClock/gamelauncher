@@ -26,22 +26,25 @@ const Home: React.FC = () => {
 
   // Handle global navigation
   const handleButtonDown = useCallback(
-    (buttonIndex: number) => {
+    (buttonIndex: number, gamepadIndex: number): boolean => {
+      console.log(`Home: Button ${buttonIndex} pressed on gamepad ${gamepadIndex}`);
       switch (buttonIndex) {
         case 13: // D-Pad Down
           if (focusedComponent === 'spotlight') {
-            // In this example, we only have the spotlight, so we might set focus to sidebar or another component
-            // For now, we keep focus on the spotlight
+            // Handle focus change if necessary
+            return true;
           }
           break;
         case 12: // D-Pad Up
           if (focusedComponent === 'sidebar') {
             setFocusedComponent('spotlight');
+            return true;
           }
           break;
         default:
-          break;
+          return false;
       }
+      return false;
     },
     [focusedComponent]
   );
@@ -59,8 +62,7 @@ const Home: React.FC = () => {
         items={spotlightItems}
         isFocused={focusedComponent === 'spotlight'}
         onLoseFocus={() => {
-          // If there is another component, set focus to it
-          // For this example, we might toggle focus to 'sidebar' or keep it on 'spotlight'
+          // Handle focus loss
         }}
       />
     </div>

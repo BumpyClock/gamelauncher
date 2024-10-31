@@ -1,51 +1,60 @@
 // src/components/Sidebar/Sidebar.tsx
-
 import React, { useContext, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { GamepadContext } from '../../contexts/GamepadContext';
 import './Sidebar.css';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { onButtonDown } = useContext(GamepadContext);
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
-  // Handle gamepad input
+  // Handle gamepad input when sidebar is open
   const handleButtonDown = useCallback(
-    (buttonIndex: number) => {
+    (buttonIndex: number, gamepadIndex: number): boolean => {
+      if (!isOpen) return false;
+
+      console.log(`Sidebar: Button ${buttonIndex} pressed on gamepad ${gamepadIndex}`);
+
       switch (buttonIndex) {
-        case 9: // 'Start' button to toggle sidebar
-          setIsOpen((prev) => !prev);
-          break;
         case 0: // 'A' button to select menu items
-          if (isOpen) {
-            // Logic to determine which menu item is selected
-            // For simplicity, let's navigate to Home
-            navigate('/');
-            setIsOpen(false);
-          }
-          break;
+          // Implement logic to determine which menu item is selected
+          // For simplicity, navigate to Home
+          navigate('/');
+          onClose();
+          return true;
         case 1: // 'B' button to close sidebar
-          if (isOpen) {
-            setIsOpen(false);
-          }
-          break;
-        // Add more cases as needed
+          onClose();
+          return true;
+        case 13: // D-Pad Down
+          // Navigate down the menu items
+          // Implement your logic here
+          return true;
+        case 12: // D-Pad Up
+          // Navigate up the menu items
+          // Implement your logic here
+          return true;
         default:
-          break;
+          return false;
       }
     },
-    [isOpen, navigate]
+    [isOpen, navigate, onClose]
   );
 
   useEffect(() => {
-    // Subscribe to gamepad events with appropriate priority
-    const unsubscribe = onButtonDown(handleButtonDown, 1); // Higher priority
-    return () => {
-      unsubscribe();
-    };
-  }, [onButtonDown, handleButtonDown]);
+    // Subscribe to gamepad events with high priority when sidebar is open
+    if (isOpen) {
+      const unsubscribe = onButtonDown(handleButtonDown, 4); // High priority
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [onButtonDown, handleButtonDown, isOpen]);
 
   return (
     <>
@@ -55,24 +64,24 @@ const Sidebar: React.FC = () => {
         animate={{ x: isOpen ? 0 : '-100%' }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <button className="toggle-button" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? 'Close' : 'Open'}
+        <button className="toggle-button" onClick={onClose}>
+          Close
         </button>
         <nav>
           <ul>
             <li>
-              <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
+              <Link to="/" onClick={onClose}>Home</Link>
             </li>
             <li>
-              <Link to="/library" onClick={() => setIsOpen(false)}>Library</Link>
+              <Link to="/library" onClick={onClose}>Library</Link>
             </li>
             <li>
-              <Link to="/settings" onClick={() => setIsOpen(false)}>Settings</Link>
+              <Link to="/settings" onClick={onClose}>Settings</Link>
             </li>
           </ul>
         </nav>
       </motion.div>
-      {isOpen && <div className="overlay" onClick={() => setIsOpen(false)}></div>}
+      {isOpen && <div className="overlay" onClick={onClose}></div>}
     </>
   );
 };

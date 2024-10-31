@@ -43,7 +43,7 @@ const useGamepad = (
             const prevPressed = previousButtons[gpIndex][index];
             const currPressed = button.pressed;
             if (prevPressed !== currPressed) {
-              console.log(`Gamepad ${gpIndex}, Button ${index}, Pressed: ${currPressed}`);
+              // console.log(`Gamepad ${gpIndex}, Button ${index}, Pressed: ${currPressed}`);
               if (currPressed) {
                 if (onButtonDownRef.current) {
                   onButtonDownRef.current(index, gpIndex);
@@ -66,7 +66,7 @@ const useGamepad = (
           gp.axes.forEach((value, index) => {
             const prevValue = previousAxes[gpIndex][index];
             if (value !== prevValue) {
-              console.log(`Gamepad ${gpIndex}, Axis ${index}, Value: ${value}`);
+              // console.log(`Gamepad ${gpIndex}, Axis ${index}, Value: ${value}`);
               if (onAxisChangeRef.current) {
                 onAxisChangeRef.current(index, value, gpIndex);
               }
