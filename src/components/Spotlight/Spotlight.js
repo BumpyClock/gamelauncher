@@ -1,11 +1,40 @@
 // src/components/Spotlight.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Gamepad from 'react-gamepad';
 import './Spotlight.css';
+import { getProductData } from '../../hooks/StoreData';
 
 const Spotlight = ({ items }) => {
   const [selectedCard, setSelectedCard] = useState(0);
+  const [productDetails, setProductDetails] = useState([]);
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      const details = await Promise.all(items.map(async (item) => {
+        const data = await getProductData(item); // Pass the string directly
+        return { title: item, ...data }; // Include the title in the returned object
+      }));
+      setProductDetails(details);
+    };
+
+    fetchProductDetails();
+  }, [items]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowLeft') {
+        setSelectedCard((prev) => (prev > 0 ? prev - 1 : items.length - 1));
+      } else if (event.key === 'ArrowRight') {
+        setSelectedCard((prev) => (prev < items.length - 1 ? prev + 1 : 0));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [items]);
 
   const handleButtonChange = (buttonName, down) => {
     if (down) {
@@ -19,7 +48,7 @@ const Spotlight = ({ items }) => {
           setSelectedCard((prev) => (prev < items.length - 1 ? prev + 1 : 0));
           break;
         case 'A':
-          console.log(`Selected: ${items[selectedCard].title}`);
+          console.log(`Selected: ${items[selectedCard]}`);
           // Perform any action you want when 'A' is pressed
           break;
         default:
@@ -43,7 +72,7 @@ const Spotlight = ({ items }) => {
   }
 
   // Ensure translateX does not exceed the maximum allowable value
-  const maxTranslateX = totalWidth - window.innerWidth +40;
+  const maxTranslateX = totalWidth - window.innerWidth + 40;
   translateX = Math.min(translateX, maxTranslateX);
 
   return (
@@ -61,20 +90,25 @@ const Spotlight = ({ items }) => {
           className="spotlight-container"
           style={{ transform: `translateX(-${translateX}px)` }}
         >
-          {items.map((item, index) => (
+          {productDetails.map((item, index) => (
             <div
               key={index}
               className={`spotlight-card ${
                 selectedCard === index ? 'selected' : ''
               }`}
               onClick={() => setSelectedCard(index)}
-             
             >
-                <div className="spotlight-image" style={{backgroundImage:`url:(${item.image})`}} />
-                <div className="spotlight-card-shadow" style={{backgroundImage: `url(${item.image})`}}/>
+              <div
+                className="spotlight-image"
+                style={{ backgroundImage: `url(${item.SuperHeroArt.Url})` }}
+              />
+              <div
+                className="spotlight-card-shadow"
+                style={{ backgroundImage: `url(${item.SuperHeroArt.Url})` }}
+              />
               <div className="spotlight-content">
                 <h4>{item.title}</h4>
-                <p>{item.description}</p>
+                <p>{item.publisherName}</p>
               </div>
             </div>
           ))}

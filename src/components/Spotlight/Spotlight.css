@@ -2,14 +2,16 @@
 
 .spotlight-wrapper {
     width: 100%;
-    /* overflow: hidden; */
+    overflow: hidden;
+    padding: 40px 0px 60px 0px;
     position: relative;
+    transition: all .24s ease-in-out;
   }
   
   .spotlight-container {
     display: flex;
     align-items: center;
-    
+    padding:20px;
     height: 300px; /* Adjust the height as needed */
     transition: all 0.5s ease;
   }
@@ -25,24 +27,31 @@
     margin-right: 10px;
   }
 
+  
+
   .spotlight-card .spotlight-image {
     height: 100%;
     width: 100%;
     background-size: cover;
     background-position: center;
     border-radius: 20px;
+    transition: all .5s ease-in;
+  }
+
+  .spotlight-card.selected .spotlight-image {
+    border: 2px solid white; /* Add white border in selected state */
   }
 
   .spotlight-card-shadow {
     position: absolute;
-    top: -5%;
-    left:-5%;
-    height:110%;
-    width: 110%;
-    filter:blur(80px);
+    top: 0;
+    left:0;
+    height:90%;
+    width: 90%;
+    filter:blur(40px);
     background-size: cover;
     background-position: center;
-    /* opacity: .5; */
+    opacity: .5;
   }
 
   .spotlight-card:not(.selected) .spotlight-card-shadow {
@@ -51,6 +60,8 @@
   
   .spotlight-card.selected .spotlight-card-shadow {
     z-index: -100;
+    opacity: 1;
+
   }
   
   .spotlight-card.selected {
@@ -60,7 +71,7 @@
   
   .spotlight-card:not(.selected) {
     width: 200px; /* Non-selected card width */
-    filter: brightness(0.9);
+    filter: brightness(0.7);
   }
   
   .spotlight-card:hover {
@@ -68,20 +79,34 @@
   }
   
   .spotlight-content {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+    position: relative;
+   margin-top:12px;
     color: white;
+    opacity: 0;
+  }
+
+  .spotlight-card:not(.selected) .spotlight-content {
+    opacity: 0;
+    transition: opacity .005s linear !important;
+
+
+  }
+
+    .spotlight-card.selected .spotlight-content {
+    opacity: 1;
+    transition: opacity .75s ease-in !important;
+
   }
   
-  .spotlight-content h4 {
+  .spotlight-card.selected .spotlight-content h4 {
     margin: 0;
-    font-size: 24px;
+    font-size: 18px;
   }
   
-  .spotlight-content p {
+  .spotlight-card.selected .spotlight-content p {
     margin-top: 5px;
     font-size: 16px;
+    opacity: .7;
   }
   
   /* Hide scrollbar if any */
