@@ -41,11 +41,13 @@
 
 .app-container {
   display: flex;
+
 }
 
 .content {
   flex: 1;
   overflow: auto;
   height: 100vh;
+  width: 100vw;
 }
 

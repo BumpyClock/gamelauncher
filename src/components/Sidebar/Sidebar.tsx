@@ -1,14 +1,16 @@
+// src/components/Sidebar/Sidebar.tsx
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Gamepad from 'react-gamepad';
 import { motion } from 'framer-motion';
 import './Sidebar.css';
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Sidebar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleButtonChange = (buttonName, down) => {
+  const handleButtonChange = (buttonName: string, down: boolean) => {
     if (down) {
       if (buttonName === 'Start') {
         // Toggle sidebar

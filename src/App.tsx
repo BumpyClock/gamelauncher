@@ -4,11 +4,11 @@ import Gamepad from 'react-gamepad';
 import Home from './pages/Home';
 import Library from './pages/Library';
 import Settings from './pages/Settings';
-import Sidebar from './components/Sidebar/Sidebar';
+import Sidebar from './components/Sidebar/Sidebar.tsx';
 import './App.css';
 
-function App() {
-  const handleButtonChange = (buttonName, down) => {
+const App: React.FC = () => {
+  const handleButtonChange = (buttonName: string, down: boolean) => {
     console.log(`Button ${buttonName} is ${down ? 'pressed' : 'released'}`);
   };
 
@@ -31,6 +31,6 @@ function App() {
       </Router>
     </Gamepad>
   );
-}
+};
 
 export default App;

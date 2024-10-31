@@ -1,19 +1,35 @@
-// src/components/Spotlight.js
+// src/components/Spotlight/Spotlight.tsx
 
 import React, { useState, useEffect } from 'react';
 import Gamepad from 'react-gamepad';
 import './Spotlight.css';
-import { getProductData } from '../../hooks/StoreData';
+import { getProductData } from '../../hooks/StoreData.tsx';
 
-const Spotlight = ({ items }) => {
-  const [selectedCard, setSelectedCard] = useState(0);
-  const [productDetails, setProductDetails] = useState([]);
+interface SpotlightProps {
+  items: string[];
+}
+
+interface ProductDetails {
+  title: string;
+  SuperHeroArt: {
+    Url: string;
+  };
+  publisherName: string;
+}
+
+const Spotlight: React.FC<SpotlightProps> = ({ items }) => {
+  const [selectedCard, setSelectedCard] = useState<number>(0);
+  const [productDetails, setProductDetails] = useState<ProductDetails[]>([]);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       const details = await Promise.all(items.map(async (item) => {
-        const data = await getProductData(item); // Pass the string directly
-        return { title: item, ...data }; // Include the title in the returned object
+        const data = await getProductData(item);
+        return { 
+          ...data, 
+          title: item, 
+          SuperHeroArt: data.SuperHeroArt || { Url: '' } 
+        };
       }));
       setProductDetails(details);
     };
@@ -22,7 +38,7 @@ const Spotlight = ({ items }) => {
   }, [items]);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
         setSelectedCard((prev) => (prev > 0 ? prev - 1 : items.length - 1));
       } else if (event.key === 'ArrowRight') {
@@ -36,7 +52,7 @@ const Spotlight = ({ items }) => {
     };
   }, [items]);
 
-  const handleButtonChange = (buttonName, down) => {
+  const handleButtonChange = (buttonName: string, down: boolean) => {
     if (down) {
       switch (buttonName) {
         case 'DPadLeft':
@@ -49,7 +65,6 @@ const Spotlight = ({ items }) => {
           break;
         case 'A':
           console.log(`Selected: ${items[selectedCard]}`);
-          // Perform any action you want when 'A' is pressed
           break;
         default:
           break;
@@ -57,21 +72,16 @@ const Spotlight = ({ items }) => {
     }
   };
 
-  // Calculate the translateX value to shift the selected card to the left edge
-  const cardWidth = 200; // Width of non-selected card
-  const expandedCardWidth = 500; // Width of selected card
-  const spacing = 10; // Space between cards
-
-  // Calculate the total width of all items
+  const cardWidth = 200;
+  const expandedCardWidth = 500;
+  const spacing = 10;
   const totalWidth = (items.length - 1) * (cardWidth + spacing) + expandedCardWidth;
 
-  // Calculate the amount to translate based on selected card
   let translateX = 0;
   for (let i = 0; i < selectedCard; i++) {
     translateX += cardWidth + spacing - 50;
   }
 
-  // Ensure translateX does not exceed the maximum allowable value
   const maxTranslateX = totalWidth - window.innerWidth + 40;
   translateX = Math.min(translateX, maxTranslateX);
 
