@@ -1,22 +1,16 @@
+// src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Gamepad from 'react-gamepad';
 import Home from './pages/Home';
 import Library from './pages/Library';
 import Settings from './pages/Settings';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
+import { GamepadProvider } from './contexts/GamepadContext';
 import './App.css';
 
 const App: React.FC = () => {
-  const handleButtonChange = (buttonName: string, down: boolean) => {
-    console.log(`Button ${buttonName} is ${down ? 'pressed' : 'released'}`);
-  };
-
   return (
-    <Gamepad
-      onButtonChange={handleButtonChange}
-      deadZone={0.1}
-    >
+    <GamepadProvider>
       <Router>
         <div className="app-container">
           <Sidebar />
@@ -29,7 +23,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </Router>
-    </Gamepad>
+    </GamepadProvider>
   );
 };
 

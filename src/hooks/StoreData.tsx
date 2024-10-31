@@ -90,6 +90,7 @@ const createResponse = (data: ApiResponse): ProductResponse => {
     SuperHeroArt: findImageByType('SuperHeroArt'),
     Trailer: findVideoByPurpose('HeroTrailer') || findVideoByPurpose('trailer'),
   };
+  
 
   return response;
 };

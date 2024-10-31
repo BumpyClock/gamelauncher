@@ -111,7 +111,10 @@
   
   /* Hide scrollbar if any */
   .spotlight-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    overflow: -moz-scrollbars-none; /* Old Firefox */
     scrollbar-width: none; /* Firefox */
+  
   }
   
   .spotlight-container::-webkit-scrollbar {
