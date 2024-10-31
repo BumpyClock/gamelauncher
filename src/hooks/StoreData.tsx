@@ -6,6 +6,7 @@ interface ImageData {
   Height: number;
   Width: number;
   VideoPurpose?: string;
+  url?: string;
 }
 
 interface ProductData {
@@ -14,12 +15,28 @@ interface ProductData {
   ProductId: string;
   Images: ImageData[];
   Previews: ImageData[];
+  categories: string[];
+  description: string;
+  developerName: string;
+  iconUrl: string;
+  iconUrlBackground: string;
+  pdpImageUrl: string;
+  posterArtUrl: string;
+  publisherName: string;
+  title: string;
+
+
 }
 
 interface ApiResponse {
   Payload: {
     SearchResults: ProductData[];
   };
+}
+
+interface ApiResponse2 {
+  productsList:  ProductData[];
+  
 }
 
 interface ProductResponse {
@@ -35,6 +52,7 @@ interface ProductResponse {
 
 export const getProductData = async (productName: string): Promise<ProductResponse> => {
   const url = `https://figma-plugin-cors-proxy.azurewebsites.net/microsoft-store?query=${productName}&mediaType=games`;
+  const url2 = `https://apps.microsoft.com/api/products/search?gl=US&hl=en-us&query=${productName}&mediaType=all&age=all&price=all&category=all&subscription=all&cursor=`
 
   try {
     const response = await fetch(url);
@@ -42,6 +60,14 @@ export const getProductData = async (productName: string): Promise<ProductRespon
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data: ApiResponse = await response.json();
+
+    const response2 = await fetch(url2);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data2: ApiResponse2 = await response2.json();
+    console.log(data2.productsList[0].title);
+
     return createResponse(data);
   } catch (error) {
     console.error('Error fetching product data:', error);
@@ -90,7 +116,7 @@ const createResponse = (data: ApiResponse): ProductResponse => {
     SuperHeroArt: findImageByType('SuperHeroArt'),
     Trailer: findVideoByPurpose('HeroTrailer') || findVideoByPurpose('trailer'),
   };
-  
+
 
   return response;
 };
