@@ -7,7 +7,7 @@ import { GamepadContext } from '../contexts/GamepadContext';
 import './Page.css';
 
 const spotlightItems: string[] = [
-  "Dyson sphere program",
+  "tony hawks pro skater 3+4 Cross-Gen Edition",
   "Starfield",
   "Call of Duty black ops",
   "donut county",

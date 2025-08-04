@@ -1,7 +1,7 @@
 // src/components/Sidebar/Sidebar.tsx
 import React, { useContext, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { GamepadContext } from '../../contexts/GamepadContext';
 import './Sidebar.css';
 

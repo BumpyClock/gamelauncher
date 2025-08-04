@@ -1,7 +1,18 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  build: {
+    lib: false,
+    target: 'esnext',
+    modulePreload: {
+      polyfill: false
+    }
+  },
+  esbuild: {
+    target: 'esnext'
+  },
+  optimizeDeps: {
+    include: ['lit', '@lit/reactive-element', 'lit-element', 'lit-html']
+  }
 })
